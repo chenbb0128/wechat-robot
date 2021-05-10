@@ -10,16 +10,21 @@ const bot = new Wechaty({
 });
 
 const onScan = require('./listeners/onScan');
-const onMessage = require('./listeners/onMessage');
+const onLogin = require('./listeners/onLogin');
+const { onMessage } = require('./listeners/onMessage');
 const onFriendShip = require('./listeners/onFriendShip');
 const { onRoomJoin } = require('./listeners/onRoomJoin');
+const { onRoomInvite } = require('./listeners/onRoomInvite');
 
 bot
   .on('scan', onScan)
+  .on('login', onLogin(bot))
   .on('room-join', onRoomJoin)
-  .on('message', onMessage(bot))
+  .on('room-invite', onRoomInvite)
+  .on('message', onMessage)
   .on('friendship', onFriendShip)
   .on('logout',     user => log.info('Bot', `${user.name()} logouted`))
   .on('error',      error => log.info('Bot', 'error: %s', error))
   .start()
+  .then(() => console.log('开始登陆微信'))
   .catch(e => console.error(e));
