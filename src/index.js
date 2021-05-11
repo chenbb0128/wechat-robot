@@ -35,13 +35,14 @@ bot
   .catch(e => console.error(e));
 
 app.get('/', function (req, res) {
-  req.getParam
   res.send('Hello World1')
 })
 
 app.get('/test', async function (req, res) {
   console.log(req.query.text)
-  const room = await bot.Room.find({ id: '20817793749@chatroom' })
+  const text = req.query.text;
+  const roomId = req.query.roomId ? req.query.roomId : '20817793749@chatroom';
+  const room = await bot.Room.find({ id: roomId })
   await room.say(req.query.text);
   res.send('我在调用');
 })

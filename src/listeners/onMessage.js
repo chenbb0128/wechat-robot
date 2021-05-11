@@ -1,6 +1,6 @@
 const { Message } = require('wechaty');
+const { FileBox } = require('file-box');
 const config = require('../config/config')
-
 
 async function onMessage(msg) {
   const room = await msg.room();
@@ -20,6 +20,9 @@ async function onMessage(msg) {
     if (room) {
       // 收到消息 提到自己
       if (await msg.mentionSelf()) {
+        const mentionList = await msg.mentionList();
+        const mentionText = await msg.mentionText();
+
         // 获取机器人自己的名字
         console.log(text);
         // 返回消息，并@来自人 
@@ -27,7 +30,9 @@ async function onMessage(msg) {
         return;
       }
     } else {
-      msg.say('你喊我干啥呢？')
+      const fileBox = FileBox.fromUrl('https://i.loli.net/2021/05/11/8VKtcbiI1JBCxuW.jpg');
+      // https://i.loli.net/2021/05/11/ga3uewvxXMiEjyS.jpg
+      msg.say(fileBox)
     }
   } else {
     console.log('消息不是文本!')
