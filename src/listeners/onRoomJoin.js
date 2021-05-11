@@ -16,33 +16,22 @@ async function onRoomJoin(
     if (!Object.values(config.room.roomList).includes(room.id)) {
       return;
     }
-    restrictionJoin(room, inviteeList, inviter);
-    let roomTopic = await room.topic()
-    // inviteeList.map(c => {
-    //   // 发送消息并@
-    //   room.say(config.room.roomJoinReply, c)
-    // })
+    // 自己
+    const inviterIsMyself = inviter.self()
+    const inviteeName = inviteeList.map(c => c.name()).join(', ')
+    await room.say('欢迎【' + inviteeName + '】加入，请准守群规，做一个可爱的群友' )
   } catch (e) {
     console.info(e)
   }
-
 }
 
 async function restrictionJoin(room, inviteeList, inviter) {
-  const inviteeName = inviteeList.map(c => c.name()).join(', ')
-  // 本人邀请
-  const inviterIsMyself = inviter.self()
-  if (inviterIsMyself) {
-    await room.say('Welcome to my room: ' + inviteeName)
-    return
-  }
-
   await room.say('请勿私自拉人。需要拉人请加我', inviter)
-  await room.say('请先加我好友，然后我来拉你入群。先把你移出啦。', inviteeList)
-  inviteeList.forEach(async c => {
-    await room.del(c)
-  })
-
+  await room.say('请先加我好友，然后我来拉你入群。先把你移出啦。', ...inviteeList)
+  setTimeout(
+    _ => inviteeList.forEach(async c => await room.del(c)),
+    3 * 1000,
+  )
 }
 
 module.exports = {
