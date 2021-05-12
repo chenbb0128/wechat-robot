@@ -22,7 +22,6 @@ async function onMessage(msg) {
       if (await msg.mentionSelf()) {
         const mentionList = await msg.mentionList();
         const mentionText = await msg.mentionText();
-
         // 获取机器人自己的名字
         console.log(text);
         // 返回消息，并@来自人 

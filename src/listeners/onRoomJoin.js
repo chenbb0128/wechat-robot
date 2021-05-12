@@ -3,6 +3,7 @@ const {
   Room,
   Wechaty,
 } = require('wechaty');
+const delay = require('delay');
 const config = require('../config/config')
 
 // 进入房间监听回调 room-群聊 inviteeList-受邀者名单 inviter-邀请者
@@ -18,8 +19,10 @@ async function onRoomJoin(
     }
     // 自己
     const inviterIsMyself = inviter.self()
-    const inviteeName = inviteeList.map(c => c.name()).join(', ')
-    await room.say('欢迎【' + inviteeName + '】加入，请准守群规，做一个可爱的群友' )
+    inviteeList.map((async c => {
+      await room.say('欢迎加入，请准守群规，做一个可爱的群友', c)
+      await delay(1000);
+    }))
   } catch (e) {
     console.info(e)
   }
@@ -27,11 +30,13 @@ async function onRoomJoin(
 
 async function restrictionJoin(room, inviteeList, inviter) {
   await room.say('请勿私自拉人。需要拉人请加我', inviter)
+  await delay(1000);
   await room.say('请先加我好友，然后我来拉你入群。先把你移出啦。', ...inviteeList)
-  setTimeout(
-    _ => inviteeList.forEach(async c => await room.del(c)),
-    3 * 1000,
-  )
+  await delay(1000);
+  inviteeList.forEach(async c => {
+    await room.del(c);
+    await delay(3000);
+  })
 }
 
 module.exports = {
