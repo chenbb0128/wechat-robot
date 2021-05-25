@@ -2,6 +2,7 @@ const QrTerminal = require('qrcode-terminal');
 const { log, ScanStatus } = require('wechaty');
 
 const onScan = function (qrCode, status) {
+  console.log(status)
   if (status === ScanStatus.Waiting || status === ScanStatus.Timeout) {
     QrTerminal.generate(qrCode, { small: true });
     const qrCodeImageUrl = ['https://wechaty.js.org/qrcode/', encodeURIComponent(qrCode)].join('');

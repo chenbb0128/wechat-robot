@@ -7,12 +7,14 @@ async function waimai(bot) {
 
   const time = [
     '0 45 10 * * *',
-    '0 50 16 * * *'
+    '0 50 16 * * *',
+
   ]
   time.map(t => {
     schedule.setSchedule(t, async () => {
       try {
-        const roomIds = Object.values(config.room.waimaiRoomList);
+        const roomList = config[config.env].room.roomList
+        const roomIds = Object.values(roomList);
         for (let key in roomIds) {
           const searchRoom = await bot.Room.find({ id: roomIds[key] });
           const fileBox = FileBox.fromUrl('https://i.loli.net/2021/05/11/8VKtcbiI1JBCxuW.jpg');

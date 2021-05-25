@@ -1,40 +1,117 @@
-const { Message } = require('wechaty');
-const { FileBox } = require('file-box');
 const config = require('../config/config')
+const delay = require('delay');
+const { getContactTextReply, getRoomTextReply } = require('../common/reply')
 
 async function onMessage(msg) {
-  const room = await msg.room();
-  const from = msg.talker();
-  const text = msg.text();
-  // 屏蔽自己的消息
-  if (msg.self()) {
-    return;
-  }
-  room && console.log(await room.topic() + ':' +room.id)
-  // 屏蔽不在自己管理的群组消息
-  if (room && !Object.values(config.room.roomList).includes(room.id)) {
-    return;
-  }
-  if (msg.type() === Message.Type.Text) {
-    // 判断消息来自群聊·
+  try {
+    const room = msg.room()
+    // 屏蔽自己的消息
+    if (msg.self()) {
+      return;
+    }
     if (room) {
-      // 收到消息 提到自己
-      if (await msg.mentionSelf()) {
-        const mentionList = await msg.mentionList();
-        const mentionText = await msg.mentionText();
-        // 获取机器人自己的名字
-        console.log(text);
-        // 返回消息，并@来自人 
-        room.say('你喊我干啥呢？', from)
+      await dispatchRoomFilterByMsgType(this, room, msg)
+    } else {
+      await dispatchFriendFilterByMsgType(this, msg)
+    }
+  } catch (e) {
+    console.log('消息模块错误');
+    console.log(e.message);
+  }
+}
+
+
+
+/**
+ * 根据消息类型处理群消息事件
+ * @param bot bot实例
+ * @param room room对象
+ * @param msg 消息主体
+ * @returns {Promise<void>}
+ */
+async function dispatchRoomFilterByMsgType(bot, room, msg) {
+  const roomName = await room.topic()
+  const userSelfName = bot.userSelf().name()
+  const content = msg.text()
+  console.log(await room.topic() + ':' +room.id)
+  const mentionSelf = content.includes(`@${userSelfName}`)
+  if (!mentionSelf) {
+    return
+  }
+  const roomList = config[config.env].room.roomList
+  // 屏蔽不在自己管理的群组消息
+  if (!Object.values(roomList).includes(room.id)) {
+    return;
+  }
+  // 发送信息的人
+  const contact = msg.talker()
+  const contactName = contact.name()
+  const type = msg.type()
+  switch (type) {
+    case bot.Message.Type.Text:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 内容: ${content}`)
+      const reply = await getRoomTextReply(bot, room, msg)
+      delay(1000)
+      msg.say(reply)
+      break
+    case bot.Message.Type.Emoticon:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一个表情`)
+      break
+    case bot.Message.Type.Image:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一张图片`)
+      break
+    case bot.Message.Type.Url:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一个链接`)
+      break
+    case bot.Message.Type.Video:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一个视频`)
+      break
+    case bot.Message.Type.Audio:
+      console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一个语音`)
+      break
+    default:
+      break
+  }
+}
+
+/**
+ * 根据消息类型处理私聊消息事件
+ * @param bot bot实例
+ * @param msg 消息主体
+ * @returns {Promise<void>}
+ */
+async function dispatchFriendFilterByMsgType(bot, msg) {
+  const type = msg.type()
+  // 发消息人
+  const contact = msg.talker()
+  const isOfficial = contact.type() === bot.Contact.Type.Official
+  switch (type) {
+    case bot.Message.Type.Text:
+      if (isOfficial) {
+        console.log('公众号消息')
         return;
       }
-    } else {
-      const fileBox = FileBox.fromUrl('https://i.loli.net/2021/05/11/8VKtcbiI1JBCxuW.jpg');
-      // https://i.loli.net/2021/05/11/ga3uewvxXMiEjyS.jpg
-      msg.say(fileBox)
-    }
-  } else {
-    console.log('消息不是文本!')
+      const reply = await getContactTextReply(bot, contact, msg)
+      delay(1000)
+      msg.say(reply)
+      break
+    case bot.Message.Type.Emoticon:
+      console.log(`发消息人${await contact.name()}:发了一个表情`)
+      break
+    case bot.Message.Type.Image:
+      console.log(`发消息人${await contact.name()}:发了一张图片`)
+      break
+    case bot.Message.Type.Url:
+      console.log(`发消息人${await contact.name()}:发了一个链接`)
+      break
+    case bot.Message.Type.Video:
+      console.log(`发消息人${await contact.name()}:发了一个视频`)
+      break
+    case bot.Message.Type.Audio:
+      console.log(`发消息人${await contact.name()}:发了一个视频`)
+      break
+    default:
+      break
   }
 }
 
