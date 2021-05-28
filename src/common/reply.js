@@ -28,7 +28,6 @@ async function getRoomTextReply(bot, room, msg) {
 }
 
 async function helpReply() {
-  da
   return "请输入以下关键词来帮助您更好的与我交流哦～\n" + "① '帮助','help','HELP'：显示帮助操作\n" + "② 淘宝'+淘口令获取商品优惠券佣金查询\n";
 }
 
@@ -44,7 +43,7 @@ async function tpwdSearch(keyword) {
         const zkPrice = (goods.price - goods.coupon_price).toFixed(2);
         const commissionRate = (goods.commission_rate / 100 * 0.85).toFixed(2);
         const commissionPrice = (zkPrice * commissionRate / 100).toFixed(2);
-        return `复制本条信息购买\n${goods.tpwd}\n原价：${goods.price} 元\n优惠价：${zkPrice} 元\n佣金比率：${commissionRate}%\n预估佣金：${commissionPrice} 元`
+        return `${goods.tpwd}\n\n====================\n原价：${goods.price} 元\n优惠价：${zkPrice} 元\n佣金比率：${commissionRate}%\n预估佣金：${commissionPrice} 元\n复制本条信息购买`
       }
     })
   return goodinfo;
