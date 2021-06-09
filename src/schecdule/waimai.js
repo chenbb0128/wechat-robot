@@ -4,11 +4,9 @@ const delay = require('delay');
 const config = require('./../config/config')
 
 async function waimai(bot) {
-
   const time = [
     '0 45 10 * * *',
     '0 50 16 * * *',
-
   ]
   time.map(t => {
     schedule.setSchedule(t, async () => {
@@ -19,7 +17,7 @@ async function waimai(bot) {
           const searchRoom = await bot.Room.find({ id: roomIds[key] });
           const fileBox = FileBox.fromUrl('https://i.loli.net/2021/05/11/8VKtcbiI1JBCxuW.jpg');
           searchRoom.say(fileBox);
-          await delay(1000);
+          await delay(2000);
           const fileBox2 = FileBox.fromUrl('https://i.loli.net/2021/05/11/ga3uewvxXMiEjyS.jpg');
           searchRoom.say(fileBox2);
           await delay(5000)

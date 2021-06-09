@@ -1,6 +1,7 @@
 const config = require('../config/config')
 const delay = require('delay');
 const { getContactTextReply, getRoomTextReply } = require('../common/reply')
+const randomNum = require('../utils/randomNum')
 
 async function onMessage(msg) {
   try {
@@ -40,7 +41,7 @@ async function dispatchRoomFilterByMsgType(bot, room, msg) {
   }
   const roomList = config[config.env].room.roomList
   // 屏蔽不在自己管理的群组消息
-  if (!Object.values(roomList).includes(room.id)) {
+  if (!Object.keys(roomList).includes(roomName)) {
     return;
   }
   // 发送信息的人
@@ -51,8 +52,12 @@ async function dispatchRoomFilterByMsgType(bot, room, msg) {
     case bot.Message.Type.Text:
       console.log(`群名: ${roomName} 发消息人: ${contactName} 内容: ${content}`)
       const reply = await getRoomTextReply(bot, room, msg)
-      delay(1000)
-      msg.say(reply)
+      const replyGapTime = randomNum(1, 3) * 1000
+      console.log(reply)
+      if (reply.trim()) {
+        await delay(replyGapTime)
+        msg.say(reply)
+      }
       break
     case bot.Message.Type.Emoticon:
       console.log(`群名: ${roomName} 发消息人: ${contactName} 发了一个表情`)
@@ -92,8 +97,12 @@ async function dispatchFriendFilterByMsgType(bot, msg) {
         return;
       }
       const reply = await getContactTextReply(bot, contact, msg)
-      delay(1000)
-      msg.say(reply)
+      console.log(reply)
+      const replyGapTime = randomNum(1, 3) * 1000
+      if (reply.trim()) {
+        await delay(replyGapTime)
+        msg.say(reply)
+      }
       break
     case bot.Message.Type.Emoticon:
       console.log(`发消息人${await contact.name()}:发了一个表情`)

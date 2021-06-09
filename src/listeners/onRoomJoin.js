@@ -14,7 +14,8 @@ async function onRoomJoin(
 ) {
   try {
     // 判断配置项群组id数组中是否存在该群聊id
-    if (!Object.values(config.room.roomList).includes(room.id)) {
+    const roomList = config[config.env].room.roomList
+    if (!Object.keys(roomList).includes(room.id)) {
       return;
     }
     // 自己
