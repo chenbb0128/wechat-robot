@@ -1,6 +1,6 @@
-const { Wechaty } = require('wechaty');
-const { PuppetPadlocal } = require('wechaty-puppet-padlocal');
-const config = require('./config/config');
+const { Wechaty } = require('wechaty')
+const { PuppetPadlocal } = require('wechaty-puppet-padlocal')
+const config = require('./config/config')
 
 const express = require('express');
 const bodyParser = require('body-parser')
@@ -49,6 +49,7 @@ bot
   .then(() => console.log('开始登陆微信'))
   .catch(e => console.error(e));
 
+// 机器人api接口
 const robotApi = require('./routes/robotApi')
-robotApi(service)
+robotApi(bot, service)
 service.listen(3000)
