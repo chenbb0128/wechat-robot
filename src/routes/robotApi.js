@@ -1,17 +1,23 @@
 const { FileBox } = require('file-box')
 const { messageType } = require('../constants/message')
+const delay = require('delay');
+const randomNum = require('../utils/randomNum')
 
 module.exports = (bot, service) => {
   service.post('/test', async function (req, res) {
-    console.log(req.body.formData)
-    res.send('调用成功')
+    const searchRoom = await bot.Room.find({topic: '陈华测试'});
+    searchRoom.say(req.body.text)
+    console.log(req.body.text)
+    res.send('调用成功1')
   })
   service.post('/sendRoomMessage', async function (req, res) {
-    const query = req.body.query
-    const msgType = req.body.msgType
+    const query = JSON.parse(req.body.query)
+    const msgType = req.body.msg_type
     const msg = req.body.msg
     const room = await bot.Room.find(query)
-    switch (msgType) {
+    const replyGapTime = randomNum(2, 5) * 1000
+    await delay(replyGapTime)
+    switch (parseInt(msgType)) {
       case messageType.TEXT:
         room.say(msg)
         break
@@ -23,14 +29,17 @@ module.exports = (bot, service) => {
         console.log('未知类别，发送消息失败')
         break
     }
+    res.send('调用成功')
   })
 
   service.post('/sendContactMessage', async function (req, res) {
-    const query = req.body.query
-    const msgType = req.body.msgType
+    const query = JSON.parse(req.body.query)
+    const msgType = req.body.msg_type
     const msg = req.body.msg
     const contact = await bot.Contact.find(query)
-    switch (msgType) {
+    const replyGapTime = randomNum(3, 5) * 1000
+    await delay(replyGapTime)
+    switch (parseInt(msgType)) {
       case messageType.TEXT:
         contact.say(msg)
         break
@@ -42,5 +51,6 @@ module.exports = (bot, service) => {
         console.log('未知类别，发送消息失败')
         break
     }
+    res.send('调用成功')
   })
 }

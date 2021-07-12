@@ -5,7 +5,8 @@ const config = require('./config/config')
 const express = require('express');
 const bodyParser = require('body-parser')
 const service = express()
-service.use(bodyParser.urlencoded({extended: true}))
+service.use(bodyParser.urlencoded({extended: false}))
+service.use(bodyParser.json())
 
 // const bot = new Wechaty({
 //   puppet: new PuppetPadlocal({
