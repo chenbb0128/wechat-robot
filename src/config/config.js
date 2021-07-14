@@ -1,6 +1,6 @@
 module.exports = {
   token: 'puppet_padlocal_cbc700081a704ed387a74c49c2e7c47b',
-  serverUrl: 'http://www.robot.test',
+  server_url: 'http://www.robot.test',
   robot_name: '阿萌机器人',
   env: 'windows',
   pad: {

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const qs = require('qs');
+const config = require('../config/config')
 
 const formatParams = values => {
   const params = {};
@@ -43,7 +44,7 @@ class BaseApi {
     let api = `/${this.getApi().replace(/^(\\s|\/)+|(\\s|\/)+$/g, '')}`;
     if (this.attachVersion()) {
       const version = 'v1'
-      api = `http://www.robot.test/api/${version}${api}`
+      api = `${config.server_url}/api/${version}${api}`
     }
 
     let headers = this.getHeaders();
