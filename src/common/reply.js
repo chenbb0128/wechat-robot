@@ -1,4 +1,5 @@
 const TpwdSearch = require('../server/TpwdSearch')
+const JdGoodsSearch = require('../server/JdGoodsSearch')
 
 async function getContactTextReply(bot, contact, msg) {
   const content = msg.text().trim();
@@ -10,6 +11,10 @@ async function getContactTextReply(bot, contact, msg) {
     // 搜索淘宝商品
     const keyword = content.replace("淘宝", "").trim()
     return await tpwdSearch(keyword)
+  }
+  if (content.indexOf("京东") >= 0) {
+    const keyword = content.replace("京东", "").trim()
+    return await jdGoodsSearch(keyword)
   }
   if (/^[0-9]{19}/.test(content)) {
     // 记录淘宝订单号
@@ -27,6 +32,10 @@ async function getRoomTextReply(bot, room, msg) {
     const keyword = content.replace("淘宝", "").trim()
     return await tpwdSearch(keyword)
   }
+  if (content.indexOf("京东") >= 0) {
+    const keyword = content.replace("京东", "").trim()
+    return await jdGoodsSearch(keyword)
+  }
   return ''
 }
 
@@ -35,11 +44,11 @@ async function helpReply() {
 }
 
 async function tpwdSearch(keyword) {
-  let goodinfo = '';
-  goodinfo = await new TpwdSearch(keyword)
+  let goodsInfo = '';
+  goodsInfo = await new TpwdSearch(keyword)
     .send()
     .then((response) => {
-      const data = response.data;
+      const data = response.data
       if (data.code == 200) {
         const goods = data.data;
         if (Object.keys(goods).length) {
@@ -52,7 +61,24 @@ async function tpwdSearch(keyword) {
         return '该商品未查询到佣金，请联系我的小主人哦～'
       }
     })
-  return goodinfo;
+  return goodsInfo;
+}
+
+async function jdGoodsSearch(keyword) {
+  let goodsInfo = '';
+  goodsInfo = await new JdGoodsSearch(keyword)
+    .send()
+    .then(response => {
+      const data = response.data
+      if (data.code == 200) {
+        const goods = data.data
+        if (Object.keys(goods).length) {
+          return goods.desc
+        }
+        return '该商品未查询到佣金，请联系我的小主人哦～'
+      }
+    })
+  return goodsInfo
 }
 
 module.exports = {
