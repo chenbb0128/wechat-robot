@@ -52,11 +52,7 @@ async function tpwdSearch(keyword) {
       if (data.code == 200) {
         const goods = data.data;
         if (Object.keys(goods).length) {
-          // 折扣价
-          const zkPrice = (goods.price - goods.coupon_price).toFixed(2);
-          const commissionRate = (goods.commission_rate / 100 * 0.85).toFixed(2);
-          const commissionPrice = (zkPrice * commissionRate / 100).toFixed(2);
-          return `${goods.tpwd}\n\n====================\n原价：${goods.price} 元\n优惠价：${zkPrice} 元\n佣金比率：${commissionRate}%\n预估佣金：${commissionPrice} 元\n复制本条信息购买`
+          return goods.intro
         }
         return '该商品未查询到佣金，请联系我的小主人哦～'
       }
@@ -73,7 +69,7 @@ async function jdGoodsSearch(keyword) {
       if (data.code == 200) {
         const goods = data.data
         if (Object.keys(goods).length) {
-          return goods.desc
+          return goods.intro
         }
         return '该商品未查询到佣金，请联系我的小主人哦～'
       }
