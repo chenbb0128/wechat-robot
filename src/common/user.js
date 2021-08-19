@@ -1,32 +1,52 @@
+const { arrayResolve } = require('../utils/array')
+const syncUsers = require('../server/SyncUsers')
+const delay = require('delay');
+
 /**
  * 更新用户联系人
  * @param bot bot实例
  * @returns {Promise<void>}
  */
 async function updateContactInfo(bot) {
+  console.log('更新用户')
   const contactList = await bot.Contact.findAll();
   let data = [];
   for (let contact of contactList) {
     contact = contact.payload
-    if (!contact.friend || contact.type !== bot.Contact.Type.Individual) {
-      continue
+    // 是好友且不是公众号
+    if (contact.friend && contact.type !== bot.Contact.Type.Official) {
+      let obj = {
+        wx_id: contact.id,
+        wx_no: contact.weixin,
+        name: contact.name,
+        alias: contact.alias,
+        gender: contact.gender,
+        province: contact.province,
+        city: contact.city,
+      }
+      data.push(obj)
     }
-    let obj = {
-      wx_id: contact.id,
-      wx_no: contact.weixin,
-      username: contact.name,
-      alias: contact.alias,
-      gender: contact.gender,
-      province: contact.province,
-      city: contact.city,
-      avatar: contact.avatar,
-      is_friend: contact.friend,
-      signature: contact.signature,
-      star: contact.star,
-    }
-    data.push(obj)
   }
-  console.log(data.length)
+  await updateFriend(data, 10)
+}
+
+async function updateFriend(list, chunkNum) {
+  const arr = arrayResolve(list, chunkNum)
+  for (const users of arr) {
+    await new syncUsers(users)
+      .send()
+      .then(response => {
+        const data = response.data
+        if (data.code !== 200) {
+          console.log('更新好友失败', data.msg)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+        console.log('更新好友列表失败')
+      })
+    await delay(10000)
+  }
 }
 
 /**

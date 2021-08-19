@@ -29,7 +29,7 @@ module.exports = (bot, service) => {
         console.log('未知类别，发送消息失败')
         break
     }
-    res.send('调用成功')
+    res.status(200).send('调用成功')
   })
 
   service.post('/sendContactMessage', async function (req, res) {
@@ -51,6 +51,16 @@ module.exports = (bot, service) => {
         console.log('未知类别，发送消息失败')
         break
     }
-    res.send('调用成功')
+    res.status(200).send('调用成功')
+  })
+
+  service.post('/setUserAlias', async function (req, res) {
+    const query = JSON.parse(req.body.query)
+    const alias = req.body.alias
+    const contact = await bot.Contact.find(query)
+    await contact.alias(alias)
+    const changeAliasTime = randomNum(3, 5) * 1000
+    await delay(changeAliasTime)
+    res.status(200).send('调用成功')
   })
 }

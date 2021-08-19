@@ -41,7 +41,7 @@ async function getRoomTextReply(bot, room, msg) {
 }
 
 async function helpReply() {
-  return "请输入以下关键词来帮助您更好的与我交流哦～\n" + "① '帮助'：显示帮助操作\n" + "② 回复京东链接或淘宝口令可查询佣金\n" + "③ 小主人vx:chenhuazhenbang\n";
+  return "请输入以下关键词来帮助您更好的与我交流哦～\n" + "① '帮助'：显示帮助操作\n" + "② 回复京东链接或淘宝口令可查询佣金\n" + "③ 小主人vx：chenhuazhenbang\n";
 }
 
 async function tpwdSearch(keyword) {
