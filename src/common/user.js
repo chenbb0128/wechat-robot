@@ -36,14 +36,15 @@ async function updateContactInfo(bot) {
  * @returns {Promise<void>}
  */
 async function addFriend(friend) {
+  const contact = friend.payload
   let data = {
-    wx_id: friend.id,
-    wx_no: friend.weixin,
-    name: friend.name,
-    alias: friend.alias,
-    gender: friend.gender,
-    province: friend.province,
-    city: friend.city,
+    wx_id: contact.id,
+    wx_no: contact.weixin,
+    name: contact.name,
+    alias: contact.alias,
+    gender: contact.gender,
+    province: contact.province,
+    city: contact.city,
   }
   await updateFriend([data])
 }
