@@ -30,7 +30,25 @@ async function updateContactInfo(bot) {
   await updateFriend(data, 10)
 }
 
-async function updateFriend(list, chunkNum) {
+/**
+ * 添加新的好友
+ * @param friend
+ * @returns {Promise<void>}
+ */
+async function addFriend(friend) {
+  let data = {
+    wx_id: friend.id,
+    wx_no: friend.weixin,
+    name: friend.name,
+    alias: friend.alias,
+    gender: friend.gender,
+    province: friend.province,
+    city: friend.city,
+  }
+  await updateFriend([data])
+}
+
+async function updateFriend(list, chunkNum = 10) {
   const arr = arrayResolve(list, chunkNum)
   for (const users of arr) {
     await new syncUsers(users)
@@ -78,5 +96,6 @@ async function updateRoomInfo(bot) {
 
 module.exports = {
   updateContactInfo,
-  updateRoomInfo
+  updateRoomInfo,
+  addFriend
 }

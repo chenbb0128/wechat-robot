@@ -7,7 +7,7 @@ class MessageReply extends BaseApi {
   }
 
   getApi() {
-    return '/reply';
+    return '/messageReply';
   }
 
   getMethod() {

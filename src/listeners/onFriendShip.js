@@ -2,11 +2,13 @@ const { Friendship } = require('wechaty');
 const config = require('../config/config');
 const randomNum = require('../utils/randomNum')
 const delay = require('delay')
+const user = require('../common/user')
 
 module.exports = async function onFriendShip(friendship) {
   let  logMsg;
   try {
-    logMsg = "添加好友" + friendship.contact().name();
+    const friend = friendship.contact()
+    logMsg = "添加好友" + friend.name()
     console.log(logMsg);
     switch (friendship.type()) {
       case Friendship.Type.Receive:
@@ -14,6 +16,7 @@ module.exports = async function onFriendShip(friendship) {
         await delay(addFriendGapTime)
         logMsg = `自动通过验证，因为验证消息是"${friendship.hello()}"`
         await friendship.accept();
+        await user.addFriend(friend)
         // 如果要发送MSG，有时需要延迟
         const replyFriendGapTime = randomNum(1, 5) * 1000
         await delay(replyFriendGapTime)
