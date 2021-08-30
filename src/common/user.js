@@ -17,12 +17,12 @@ async function updateContactInfo(bot) {
     if (contact.friend && contact.type !== bot.Contact.Type.Official) {
       let obj = {
         wx_id: contact.id,
-        wx_no: contact.weixin,
-        name: contact.name,
-        alias: contact.alias,
-        gender: contact.gender,
-        province: contact.province,
-        city: contact.city,
+        wx_no: contact.weixin || '',
+        name: contact.name || '',
+        alias: contact.alias || '',
+        gender: contact.gender || 1,
+        province: contact.province || '',
+        city: contact.city || '',
       }
       data.push(obj)
     }
@@ -39,12 +39,12 @@ async function addFriend(friend) {
   const contact = friend.payload
   let data = {
     wx_id: contact.id,
-    wx_no: contact.weixin,
-    name: contact.name,
-    alias: contact.alias,
-    gender: contact.gender,
-    province: contact.province,
-    city: contact.city,
+    wx_no: contact.weixin || '',
+    name: contact.name || '',
+    alias: contact.alias || '',
+    gender: contact.gender || 1,
+    province: contact.province || '',
+    city: contact.city || '',
   }
   await updateFriend([data])
 }
