@@ -1,9 +1,10 @@
 const BaseApi = require("./BaseApi");
 
 class MessageReply extends BaseApi {
-  constructor(keyword) {
+  constructor(keyword, user) {
     super();
     this.keyword = keyword;
+    this.user = user
   }
 
   getApi() {
@@ -17,6 +18,7 @@ class MessageReply extends BaseApi {
   getParams() {
     return {
       keyword: this.keyword,
+      user: this.user
     }
   }
 }

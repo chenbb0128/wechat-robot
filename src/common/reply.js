@@ -1,5 +1,3 @@
-const TpwdSearch = require('../server/TpwdSearch')
-const JdGoodsSearch = require('../server/JdGoodsSearch')
 const MessageReply = require('../server/MessageReply')
 
 async function getContactTextReply(bot, contact, msg) {
@@ -11,30 +9,36 @@ async function getContactTextReply(bot, contact, msg) {
   if (/^[0-9]{19}/.test(content)) {
     // 记录淘宝订单号
   }
-  return await reply(content)
+  return await reply(content, contact)
 }
 
-async function getRoomTextReply(bot, room, msg) {
+async function getRoomTextReply(bot, room, contact, msg) {
   const content = msg.text().replace(/@[^,，：:\s@]+/g, '').trim()
   if (['帮助'].includes(content) || content === '') {
     return helpReply()
   }
-  return await reply(content)
+  return await reply(content, contact)
 }
 
 async function helpReply() {
   return "请输入以下关键词来帮助您更好的与我交流哦～\n" + "① '帮助'：显示帮助操作\n" + "② 回复京东链接或淘宝口令可查询佣金\n" + "③ 小主人vx：chenhuazhenbang\n";
 }
 
-async function reply(keyword) {
-  const message = await new MessageReply(keyword)
+async function reply(keyword, contact) {
+  contact = contact.payload
+  const user = {
+    wx_id: contact.id,
+    wx_no: contact.weixin || '',
+    uid: contact.alias || '',
+  }
+  const message = await new MessageReply(keyword, user)
     .send()
     .then(response => {
       const data = response.data
       if (data.code == 200) {
-        const goods = data.data
-        if (Object.keys(goods).length) {
-          return goods.desc
+        const reply = data.data
+        if (Object.keys(reply).length) {
+          return reply.desc
         }
       }
     })

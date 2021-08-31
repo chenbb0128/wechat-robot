@@ -51,7 +51,7 @@ async function dispatchRoomFilterByMsgType(bot, room, msg) {
   switch (type) {
     case bot.Message.Type.Text:
       console.log(`群名: ${roomName} 发消息人: ${contactName} 内容: ${content}`)
-      const reply = await getRoomTextReply(bot, room, msg)
+      const reply = await getRoomTextReply(bot, room, contact, msg)
       const replyGapTime = randomNum(1, 3) * 1000
       console.log(reply)
       if (reply.trim()) {
