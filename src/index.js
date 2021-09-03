@@ -8,17 +8,17 @@ const service = express()
 service.use(bodyParser.urlencoded({extended: false}))
 service.use(bodyParser.json())
 
-const bot = new Wechaty({
-  puppet: new PuppetPadlocal({
-    token: config.token
-  }),
-  name: config.robot_name
-});
-
 // const bot = new Wechaty({
-//   name: config.robot_name,
-//   puppet: 'wechaty-puppet-wechat',
+//   puppet: new PuppetPadlocal({
+//     token: config.token
+//   }),
+//   name: config.robot_name
 // });
+
+const bot = new Wechaty({
+  name: config.robot_name,
+  puppet: 'wechaty-puppet-wechat',
+});
 
 const onScan = require('./listeners/onScan');
 const onLogin = require('./listeners/onLogin');
@@ -53,4 +53,4 @@ bot
 // 机器人api接口
 const robotApi = require('./routes/robotApi')
 robotApi(bot, service)
-service.listen(3333)
+service.listen(3000)

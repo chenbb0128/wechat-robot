@@ -2,7 +2,7 @@ module.exports = {
   token: 'puppet_padlocal_9780568a6cd64469868000d4d9cf4e03',
   server_url: 'http://robot-admin.siweiqu.com',
   robot_name: '阿萌机器人',
-  env: 'pad',
+  env: 'windows',
   pad: {
     room: {
       roomJoinReply: `\n 你好，欢迎你的加入，请自觉遵守群规则，文明交流！😊`,
