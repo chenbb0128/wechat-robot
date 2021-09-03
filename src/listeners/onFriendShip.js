@@ -15,7 +15,7 @@ module.exports = async function onFriendShip(friendship) {
         const addFriendGapTime = randomNum(6, 10) * 10000
         await delay(addFriendGapTime)
         logMsg = `自动通过验证，因为验证消息是"${friendship.hello()}"`
-        await friendship.accept();
+        await friendship.accept()
         await user.addFriend(friend)
         // 如果要发送MSG，有时需要延迟
         const replyFriendGapTime = randomNum(1, 5) * 1000

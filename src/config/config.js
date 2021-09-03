@@ -1,19 +1,19 @@
 module.exports = {
-  token: 'puppet_padlocal_cbc700081a704ed387a74c49c2e7c47b',
-  server_url: 'http://robot-admin.siweiqu.com/',
+  token: 'puppet_padlocal_9780568a6cd64469868000d4d9cf4e03',
+  server_url: 'http://robot-admin.siweiqu.com',
   robot_name: '阿萌机器人',
-  env: 'windows',
+  env: 'pad',
   pad: {
     room: {
       roomJoinReply: `\n 你好，欢迎你的加入，请自觉遵守群规则，文明交流！😊`,
       roomList: {
         '测试机器人': '20817793749@chatroom',
-        '滨江年会中奖物品闲置交易群': '23927863374@chatroom',
         '致富养鸡场': '18120212043@chatroom',
-        '发家致富合作小组': '6438070419@chatroom',
         '文明奋斗': '8557197924@chatroom',
         '优惠商品返利': '17944941494@chatroom',
         '陈华测试': 'xxx',
+        '一家人的唠叨': '一家人的唠叨',
+        '发家致富合作小组': '6438070419@chatroom',
       },
       waimaiRoomList: {
         '测试机器人': '20817793749@chatroom',

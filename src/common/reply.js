@@ -41,6 +41,7 @@ async function reply(keyword, contact) {
           return reply.desc
         }
       }
+      reply.desc = ''
     })
     .catch(response => {
       return '我发生错误了，请原谅我，我马上让小主人修理我一下'

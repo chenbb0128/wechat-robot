@@ -23,7 +23,7 @@
     "qs": "^6.10.1",
     "wechaty": "^0.62.3",
     "wechaty-plugin-contrib": "^0.14.17",
-    "wechaty-puppet-padlocal": "^0.2.46",
+    "wechaty-puppet-padlocal": "^0.4.2",
     "wechaty-puppet-wechat": "^0.28.4"
   }
 }
